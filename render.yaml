@@ -1,0 +1,24 @@
+# Render Blueprint — New Blueprint → chọn repo GitHub
+# ADMIN_PASSWORD, SESSION_SECRET thêm trong dashboard (Secret)
+services:
+  - type: web
+    name: non-concert
+    runtime: node
+    plan: free
+    rootDir: server
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: 20
+      - key: CONCERT_DATE
+        value: 2025-12-31T20:00:00+07:00
+      - key: MAX_TICKETS
+        value: 200
+      - key: TICKET_PRICE_VND
+        value: 350000
+      - key: ADMIN_ALLOW_RESET
+        value: "true"

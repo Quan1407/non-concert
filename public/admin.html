@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NÓN CONCERT — Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      window.__API_BASE__ = window.__API_BASE__ || '';
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">Nón Concert · Admin</div>
+        <nav class="nav">
+          <a class="btn btn--ghost" href="/">Trang chủ</a>
+          <a class="btn btn--ghost" href="/checkin.html">Check-in</a>
+          <button type="button" class="btn btn--ghost" id="btn-logout">Đăng xuất</button>
+        </nav>
+      </header>
+
+      <section class="hero" style="padding-top: 0.5rem; text-align: left">
+        <h1 style="text-align: center">Dashboard</h1>
+      </section>
+
+      <div id="stats" class="stats"></div>
+
+      <div class="card">
+        <h2>Danh sách khách / vé</h2>
+        <div class="admin-toolbar" style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 0.75rem">
+          <input
+            id="search"
+            type="search"
+            placeholder="Tìm theo tên, SĐT, email, mã vé…"
+            style="flex: 1; min-width: 200px; margin-bottom: 0"
+          />
+          <select id="filter-in" style="max-width: 200px; margin-bottom: 0">
+            <option value="all">Tất cả check-in</option>
+            <option value="true">Đã check-in hết</option>
+            <option value="false">Chưa check-in hết</option>
+          </select>
+          <select id="filter-pay" style="max-width: 200px; margin-bottom: 0">
+            <option value="all">Mọi thanh toán</option>
+            <option value="pending">Chờ xác nhận CK</option>
+            <option value="paid">Đã thanh toán</option>
+          </select>
+          <button type="button" class="btn btn--primary" id="btn-refresh">Làm mới</button>
+          <button type="button" class="btn btn--danger" id="btn-reset-all" title="Xóa toàn bộ vé trong hệ thống">
+            Xóa hết vé
+          </button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Tên</th>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>SL</th>
+                <th>Tổng tiền</th>
+                <th>Mã vé</th>
+                <th>Thanh toán</th>
+                <th>Check-in</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <footer>Đăng nhập bằng tài khoản trong biến môi trường server.</footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/admin.js"></script>
+  </body>
+</html>

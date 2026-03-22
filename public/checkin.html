@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NÓN CONCERT — Check-in</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      window.__API_BASE__ = window.__API_BASE__ || '';
+    </script>
+    <!-- Quét QR bằng camera (tùy chọn) -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">Nón Concert · Check-in</div>
+        <nav class="nav">
+          <a class="btn btn--ghost" href="/">Trang chủ</a>
+          <a class="btn btn--ghost" href="/checkin.html">Check-in</a>
+          <a class="btn btn--ghost" href="/admin.html">Admin</a>
+        </nav>
+      </header>
+
+      <section class="hero" style="padding-top: 0.5rem">
+        <h1>Check-in vé</h1>
+        <p class="lead">Nhập mã vé hoặc quét QR tại cổng.</p>
+      </section>
+
+      <div class="card" style="max-width: 520px; margin: 0 auto">
+        <label for="ticket_code">Mã vé (ví dụ NON-AB12CD34)</label>
+        <input id="ticket_code" autocomplete="off" placeholder="NON-XXXXXXXX" />
+
+        <button type="button" class="btn btn--primary" id="btn-checkin">Scan / Check-in</button>
+        <button type="button" class="btn btn--ghost" id="btn-camera" style="margin-left: 0.5rem">
+          Bật camera quét
+        </button>
+
+        <div id="reader" style="display: none; max-width: 100%"></div>
+
+        <div id="result" class="checkin-result" role="status"></div>
+      </div>
+    </div>
+
+    <footer>Nhân viên: xác nhận màn hình trước khi cho vào</footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/checkin.js"></script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NÓN CONCERT — Đặt vé</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,800;1,9..40,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <!-- Khi deploy frontend lên Vercel: đặt URL API Render -->
+    <script>
+      window.__API_BASE__ = window.__API_BASE__ || '';
+    </script>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">Nón Concert</div>
+        <nav class="nav">
+          <a class="btn btn--ghost" href="/">Trang chủ</a>
+          <a class="btn btn--ghost" href="/checkin.html">Check-in</a>
+          <a class="btn btn--ghost" href="/admin.html">Admin</a>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <h1>NÓN CONCERT</h1>
+        <p class="lead">Đêm nhạc độc lập — bản hòa âm của ánh sáng và tiếng vang.</p>
+        <div id="countdown" class="countdown" aria-live="polite"></div>
+      </section>
+
+      <div class="grid-2">
+        <div class="card">
+          <h2>Đặt vé</h2>
+          <p class="price-line form-hint">
+            Vui lòng nhập đúng thông tin của mình — ban tổ chức dùng để xác minh vé và liên hệ khi cần.
+          </p>
+          <p id="sold-out-line" class="lead" style="display: none; margin-top: -0.25rem"></p>
+          <form id="purchase-form" novalidate>
+            <label for="name">Họ tên</label>
+            <input id="name" name="name" required minlength="2" maxlength="120" autocomplete="name" />
+
+            <label for="phone">Điện thoại</label>
+            <input id="phone" name="phone" required inputmode="tel" autocomplete="tel" placeholder="0901234567" />
+
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required autocomplete="email" />
+
+            <label for="quantity">Số lượng vé</label>
+            <select id="quantity" name="quantity"></select>
+
+            <p class="price-line" id="price-preview"></p>
+
+            <button type="submit" class="btn btn--primary" id="submit-btn">Mua vé</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Vé của bạn</h2>
+          <p class="price-line" id="result-hint">
+            Sau khi đặt vé, quét VietQR để chuyển khoản; mã vé dùng khi check-in.
+          </p>
+          <div id="ticket-list" class="ticket-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>NÓN CONCERT · vé điện tử có mã QR · check-in tại cổng</footer>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/home.js"></script>
+  </body>
+</html>

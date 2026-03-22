@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập Admin — NÓN CONCERT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      window.__API_BASE__ = window.__API_BASE__ || '';
+    </script>
+  </head>
+  <body>
+    <div class="shell" style="max-width: 420px; padding-top: 3rem">
+      <header class="topbar" style="justify-content: center">
+        <div class="brand">Nón Concert · Admin</div>
+      </header>
+
+      <div class="card" style="margin-top: 1.5rem">
+        <h2 style="text-align: center; margin-top: 0">Đăng nhập</h2>
+        <p class="price-line" style="text-align: center; margin-bottom: 1rem">
+          Chỉ ban tổ chức mới vào được dashboard.
+        </p>
+        <form id="login-form" novalidate>
+          <label for="username">Tài khoản</label>
+          <input id="username" name="username" autocomplete="username" required />
+
+          <label for="password">Mật khẩu</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required />
+
+          <p id="login-error" class="price-line" style="color: var(--danger); min-height: 1.25rem"></p>
+
+          <button type="submit" class="btn btn--primary" style="width: 100%">Đăng nhập</button>
+        </form>
+      </div>
+
+      <p style="text-align: center; margin-top: 1.5rem">
+        <a href="/">← Về trang chủ</a>
+      </p>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/admin-login.js"></script>
+  </body>
+</html>
