@@ -40,9 +40,9 @@ async function sendPurchaseConfirmation(payload) {
 
   const from = process.env.EMAIL_FROM || 'Vietnamese Excellence - World-class Hospitality <noreply@local>';
   const attachments = [];
-  const bankName = process.env.BANK_NAME || 'BIDV';
-  const bankHolder = process.env.BANK_ACCOUNT_NAME || 'DOAN MINH QUAN';
-  const bankNo = process.env.BANK_ACCOUNT_NUMBER || '7880368737';
+  const bankName = process.env.BANK_NAME || 'MoMo';
+  const bankHolder = process.env.BANK_ACCOUNT_NAME || 'NGUYEN THI NGOC TRAM';
+  const bankNo = process.env.BANK_ACCOUNT_NUMBER || 'PSG26082161000000048';
   const codes = payload.tickets.map((t) => t.ticket_code);
   const codesStr = codes.join(', ');
   const total =
@@ -97,5 +97,6 @@ function formatVnd(n) {
 }
 
 module.exports = { sendPurchaseConfirmation };
+
 
 

@@ -33,9 +33,9 @@ const CONCERT_DATE = process.env.CONCERT_DATE || '2025-12-31T20:00:00+07:00';
 
 /** VietQR / thông tin CK (hiển thị sau khi đặt vé) */
 const PAYMENT_QR_URL = process.env.PAYMENT_QR_URL || '/images/vietqr-payment.png';
-const BANK_ACCOUNT_NAME = process.env.BANK_ACCOUNT_NAME || 'DOAN MINH QUAN';
-const BANK_ACCOUNT_NUMBER = process.env.BANK_ACCOUNT_NUMBER || '7880368737';
-const BANK_NAME = process.env.BANK_NAME || 'BIDV';
+const BANK_ACCOUNT_NAME = process.env.BANK_ACCOUNT_NAME || 'NGUYEN THI NGOC TRAM';
+const BANK_ACCOUNT_NUMBER = process.env.BANK_ACCOUNT_NUMBER || 'PSG26082161000000048';
+const BANK_NAME = process.env.BANK_NAME || 'MoMo';
 
 const ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '';
@@ -380,7 +380,7 @@ app.get('/admin.html', (req, res) => {
 app.use(express.static(publicDir));
 
 app.listen(PORT, () => {
-  console.log(`NÓN CONCERT API http://localhost:${PORT}`);
+  console.log(`Vietnamese Excellence API http://localhost:${PORT}`);
   if (process.env.NODE_ENV === 'production') {
     if (!ADMIN_PASSWORD) console.warn('[admin] Thiếu ADMIN_PASSWORD — không đăng nhập được.');
     if (SESSION_SECRET === 'dev-only-change-in-production') {
@@ -388,3 +388,4 @@ app.listen(PORT, () => {
     }
   }
 });
+

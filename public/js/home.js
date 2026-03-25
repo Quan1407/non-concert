@@ -26,9 +26,9 @@
     available: 200,
     soldOut: false,
     paymentQrUrl: '/images/vietqr-payment.png',
-    bankAccountName: 'DOAN MINH QUAN',
-    bankAccountNumber: '7880368737',
-    bankName: 'BIDV',
+    bankAccountName: 'NGUYEN THI NGOC TRAM',
+    bankAccountNumber: 'PSG26082161000000048',
+    bankName: 'MoMo',
   };
 
   function formatVnd(n) {
@@ -221,3 +221,4 @@
 
   loadConfig();
 })();
+
