@@ -8,8 +8,10 @@ const nodemailer = require('nodemailer');
 
 function createTransport() {
   const host = process.env.SMTP_HOST;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const user = String(process.env.SMTP_USER || '').trim();
+  // Gmail App Password thường hiển thị theo nhóm 4 ký tự có thể kèm khoảng trắng.
+  // Nodemailer/SMTP hay yêu cầu chuỗi liền, nên strip mọi whitespace.
+  const pass = String(process.env.SMTP_PASS || '').replace(/\s+/g, '').trim();
   if (!host || !user || !pass) return null;
   return nodemailer.createTransport({
     host,
