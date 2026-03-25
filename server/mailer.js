@@ -38,7 +38,7 @@ async function sendPurchaseConfirmation(payload) {
     return { skipped: true };
   }
 
-  const from = process.env.EMAIL_FROM || 'NÓN CONCERT <noreply@local>';
+  const from = process.env.EMAIL_FROM || 'Vietnamese Excellence - World-class Hospitality <noreply@local>';
   const attachments = [];
   const bankName = process.env.BANK_NAME || 'BIDV';
   const bankHolder = process.env.BANK_ACCOUNT_NAME || 'DOAN MINH QUAN';
@@ -51,7 +51,7 @@ async function sendPurchaseConfirmation(payload) {
       : codes.length * Number(process.env.TICKET_PRICE_VND || 350000);
 
   let htmlBody = `<p>Xin chào <strong>${escapeHtml(payload.name)}</strong>,</p>
-    <p>Cảm ơn bạn đã đặt vé <strong>NÓN CONCERT</strong>.</p>
+    <p>Cảm ơn bạn đã đặt vé <strong>Vietnamese Excellence - World-class Hospitality</strong>.</p>
     <p><strong>Chuyển khoản ${escapeHtml(formatVnd(total))}</strong></p>
     <p>${escapeHtml(bankHolder)} — ${escapeHtml(bankName)} — STK <strong>${escapeHtml(bankNo)}</strong><br/>
     Nội dung CK: <code>${escapeHtml(codesStr)}</code></p>`;
@@ -76,7 +76,7 @@ async function sendPurchaseConfirmation(payload) {
   await transport.sendMail({
     from,
     to: payload.email,
-    subject: 'NÓN CONCERT — Xác nhận đặt vé & thanh toán',
+    subject: 'Vietnamese Excellence - World-class Hospitality — Xác nhận đặt vé & thanh toán',
     html: htmlBody,
     attachments,
   });
@@ -97,3 +97,5 @@ function formatVnd(n) {
 }
 
 module.exports = { sendPurchaseConfirmation };
+
+
