@@ -29,13 +29,21 @@ async function readErrorMessage(r) {
 async function apiGet(path, options = {}) {
   const withCookie = options.withCredentials ?? adminPath(path);
   const skipAuthRedirect = options.skipAuthRedirect === true;
-  const timeoutMs = typeof options.timeoutMs === 'number' ? options.timeoutMs : 30000;
+  const timeoutMs = typeof options.timeoutMs === 'number' ? options.timeoutMs : 15000;
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), timeoutMs);
-  const r = await fetch(`${apiBase()}${path}`, {
-    credentials: withCookie ? 'include' : 'omit',
-    signal: controller.signal,
-  }).finally(() => clearTimeout(t));
+  let r;
+  try {
+    r = await fetch(`${apiBase()}${path}`, {
+      credentials: withCookie ? 'include' : 'omit',
+      signal: controller.signal,
+    }).finally(() => clearTimeout(t));
+  } catch (err) {
+    if (err && err.name === 'AbortError') {
+      throw new Error('Timeout khi tải dữ liệu. Vui lòng thử lại.');
+    }
+    throw err;
+  }
   if (r.status === 401 && withCookie && !skipAuthRedirect) {
     window.location.assign('/admin-login.html');
     throw new Error('Cần đăng nhập');
@@ -52,17 +60,26 @@ async function apiGet(path, options = {}) {
 async function apiPost(path, body, options = {}) {
   const withCookie = options.withCredentials ?? adminPath(path);
   const skipAuthRedirect = options.skipAuthRedirect === true;
-  const timeoutMs = typeof options.timeoutMs === 'number' ? options.timeoutMs : 45000;
+  const timeoutMs = typeof options.timeoutMs === 'number' ? options.timeoutMs : 20000;
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), timeoutMs);
-  const r = await fetch(`${apiBase()}${path}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-    credentials: withCookie ? 'include' : 'omit',
-    signal: controller.signal,
-  });
-  clearTimeout(t);
+  let r;
+  try {
+    r = await fetch(`${apiBase()}${path}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+      credentials: withCookie ? 'include' : 'omit',
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (err && err.name === 'AbortError') {
+      throw new Error('Timeout khi tạo vé & QR. Vui lòng thử lại.');
+    }
+    throw err;
+  } finally {
+    clearTimeout(t);
+  }
   const text = await r.text();
   let data = {};
   try {
