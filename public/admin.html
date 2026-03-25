@@ -78,6 +78,34 @@
       </div>
     </div>
 
+    <!-- Modal sửa thông tin người đặt -->
+    <div id="edit-modal" class="modal-overlay" style="display: none">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3 style="margin: 0">Sửa thông tin người đặt</h3>
+          <button type="button" class="btn btn--ghost btn--table" id="edit-close" title="Đóng">✕</button>
+        </div>
+
+        <div class="modal-body">
+          <label for="edit-name">Họ tên</label>
+          <input id="edit-name" autocomplete="name" />
+
+          <label for="edit-phone">Điện thoại</label>
+          <input id="edit-phone" autocomplete="tel" inputmode="tel" />
+
+          <label for="edit-email">Email</label>
+          <input id="edit-email" autocomplete="email" type="email" />
+
+          <p id="edit-error" class="price-line" style="color: var(--danger); display: none; margin-top: 0.75rem"></p>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn--ghost" id="edit-cancel">Hủy</button>
+          <button type="button" class="btn btn--primary" id="edit-save">Lưu</button>
+        </div>
+      </div>
+    </div>
+
     <footer>Đăng nhập bằng tài khoản trong biến môi trường server.</footer>
 
     <script src="/js/api.js"></script>

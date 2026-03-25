@@ -126,6 +126,14 @@ function deleteAllTickets() {
   return info.changes;
 }
 
+/** Admin: cập nhật thông tin người đặt (theo purchase_ref, áp dụng cho toàn bộ vé trong đơn) */
+function updateBuyerInfo(purchaseRef, { name, phone, email }) {
+  const info = db
+    .prepare(`UPDATE tickets SET name = ?, phone = ?, email = ? WHERE purchase_ref = ?`)
+    .run(name, phone, email, purchaseRef);
+  return info.changes;
+}
+
 function adminStats() {
   const sold = countTicketsSold();
   const revenue = db
@@ -155,6 +163,7 @@ module.exports = {
   markCheckedIn,
   markPurchasePaid,
   deleteAllTickets,
+  updateBuyerInfo,
   listPurchases,
   adminStats,
 };

@@ -14,6 +14,18 @@
   const btnResetAll = document.getElementById('btn-reset-all');
   const btnLogout = document.getElementById('btn-logout');
 
+  // Modal sửa thông tin người đặt
+  const editModal = document.getElementById('edit-modal');
+  const editNameEl = document.getElementById('edit-name');
+  const editPhoneEl = document.getElementById('edit-phone');
+  const editEmailEl = document.getElementById('edit-email');
+  const editErrorEl = document.getElementById('edit-error');
+  const editSaveBtn = document.getElementById('edit-save');
+  const editCancelBtn = document.getElementById('edit-cancel');
+  const editCloseBtn = document.getElementById('edit-close');
+
+  let editPurchaseRef = null;
+
   function formatVnd(n) {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n);
   }
@@ -46,9 +58,17 @@
       const tr = document.createElement('tr');
       const paid = row.payment_status === 'paid';
       const btn =
-        paid ?
-          '<span class="badge badge--ok">Đã CK</span>'
-        : `<button type="button" class="btn btn--primary btn--table" data-ref="${escapeHtml(row.purchase_ref)}">Xác nhận đã CK</button>`;
+        paid
+          ? '<span class="badge badge--ok">Đã CK</span>'
+          : `<button type="button" class="btn btn--primary btn--table" data-ref="${escapeHtml(row.purchase_ref)}">Xác nhận đã CK</button>`;
+
+      const editBtn = `<button type="button" class="btn btn--ghost btn--table" data-edit-ref="${escapeHtml(
+        row.purchase_ref
+      )}" data-edit-name="${escapeHtml(encodeURIComponent(row.name))}" data-edit-phone="${escapeHtml(
+        encodeURIComponent(row.phone)
+      )}" data-edit-email="${escapeHtml(encodeURIComponent(row.email))}">
+        Sửa
+      </button>`;
       tr.innerHTML = `
         <td>${escapeHtml(row.name)}</td>
         <td>${escapeHtml(row.phone)}</td>
@@ -58,7 +78,12 @@
         <td style="max-width:220px;word-break:break-all"><code>${escapeHtml(row.ticket_codes)}</code></td>
         <td>${paid ? '<span class="badge badge--ok">Đã thanh toán</span>' : '<span class="badge badge--sold">Chờ CK</span>'}</td>
         <td><span class="badge ${row.checked_in_summary === 'all' ? 'badge--ok' : row.checked_in_summary === 'none' ? 'badge--sold' : 'badge--warn'}">${statusLabel(row.checked_in_summary)}</span><br/><small style="color:var(--muted)">${row.checked_in_count}/${row.quantity}</small></td>
-        <td>${btn}</td>
+        <td style="white-space: nowrap">
+          <div style="display:flex; gap:0.45rem; align-items:center; flex-wrap:wrap">
+            ${btn}
+            ${editBtn}
+          </div>
+        </td>
       `;
       tbody.appendChild(tr);
     });
@@ -75,6 +100,23 @@
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
+  }
+
+  function openEditModal({ purchaseRef, name, phone, email }) {
+    if (!editModal) return;
+    editPurchaseRef = purchaseRef;
+    editNameEl.value = name || '';
+    editPhoneEl.value = phone || '';
+    editEmailEl.value = email || '';
+    editErrorEl.style.display = 'none';
+    editErrorEl.textContent = '';
+    editModal.style.display = 'flex';
+  }
+
+  function closeEditModal() {
+    editPurchaseRef = null;
+    if (!editModal) return;
+    editModal.style.display = 'none';
   }
 
   let debounce;
@@ -166,6 +208,17 @@
   });
 
   tbody.addEventListener('click', async (e) => {
+    const bEdit = e.target.closest('[data-edit-ref]');
+    if (bEdit && bEdit.dataset.editRef) {
+      openEditModal({
+        purchaseRef: bEdit.dataset.editRef,
+        name: decodeURIComponent(bEdit.dataset.editName || ''),
+        phone: decodeURIComponent(bEdit.dataset.editPhone || ''),
+        email: decodeURIComponent(bEdit.dataset.editEmail || ''),
+      });
+      return;
+    }
+
     const b = e.target.closest('[data-ref]');
     if (!b || !b.dataset.ref) return;
     setLoading(true, 'Đang cập nhật…');
@@ -179,6 +232,49 @@
       setLoading(false);
     }
   });
+
+  if (editModal) {
+    editModal.addEventListener('click', (e) => {
+      if (e.target === editModal) closeEditModal();
+    });
+  }
+
+  if (editCloseBtn) editCloseBtn.addEventListener('click', closeEditModal);
+  if (editCancelBtn) editCancelBtn.addEventListener('click', closeEditModal);
+
+  if (editSaveBtn) {
+    editSaveBtn.addEventListener('click', async () => {
+      if (!editPurchaseRef) return;
+
+      const name = (editNameEl?.value || '').trim();
+      const phone = (editPhoneEl?.value || '').trim();
+      const email = (editEmailEl?.value || '').trim();
+
+      if (!name || !phone || !email) {
+        editErrorEl.textContent = 'Vui lòng điền đủ Họ tên, SĐT và Email.';
+        editErrorEl.style.display = 'block';
+        return;
+      }
+
+      setLoading(true, 'Đang cập nhật thông tin…');
+      try {
+        await apiPost('/api/admin/update-buyer', {
+          purchase_ref: editPurchaseRef,
+          name,
+          phone,
+          email,
+        });
+        toast('Đã cập nhật thông tin người đặt', 'success');
+        closeEditModal();
+        await refreshAll({ overlay: false });
+      } catch (err) {
+        editErrorEl.textContent = err.message || 'Không cập nhật được';
+        editErrorEl.style.display = 'block';
+      } finally {
+        setLoading(false);
+      }
+    });
+  }
 
   refreshAll({ overlay: true });
 })();

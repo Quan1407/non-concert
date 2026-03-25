@@ -19,6 +19,7 @@ const {
   markCheckedIn,
   markPurchasePaid,
   deleteAllTickets,
+  updateBuyerInfo,
   listPurchases,
   adminStats,
 } = require('./database');
@@ -345,6 +346,34 @@ app.post(
       return res.status(404).json({ success: false, message: 'Không tìm thấy đơn' });
     }
     res.json({ success: true, message: 'Đã xác nhận thanh toán', ticketsUpdated: n });
+  }
+);
+
+/** Admin: sửa thông tin người đặt vé theo purchase_ref */
+app.post(
+  '/api/admin/update-buyer',
+  requireAdmin,
+  body('purchase_ref').isUUID().withMessage('purchase_ref không hợp lệ'),
+  body('name').isLength({ min: 2, max: 120 }).withMessage('Tên không hợp lệ'),
+  body('phone').matches(/^[0-9+\s().-]{8,20}$/).withMessage('Số điện thoại không hợp lệ'),
+  body('email').isEmail().normalizeEmail().isLength({ max: 254 }).withMessage('Email không hợp lệ'),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success: false, message: errors.array()[0].msg });
+    }
+
+    const purchaseRef = clean(req.body.purchase_ref);
+    const name = clean(req.body.name);
+    const phone = clean(req.body.phone);
+    const email = clean(req.body.email);
+
+    const changed = updateBuyerInfo(purchaseRef, { name, phone, email });
+    if (!changed) {
+      return res.status(404).json({ success: false, message: 'Không tìm thấy đơn' });
+    }
+
+    res.json({ success: true, message: 'Đã cập nhật thông tin người đặt' });
   }
 );
 
