@@ -25,7 +25,13 @@ const {
 const { sendPurchaseConfirmation } = require('./mailer');
 
 const app = express();
-const PORT = Number(process.env.PORT || 3000);
+const PORT = (() => {
+  const raw = process.env.PORT;
+  // Render cung cấp PORT (string). Nếu rỗng/không parse được -> fallback.
+  const n = raw ? Number.parseInt(raw, 10) : NaN;
+  return Number.isFinite(n) ? n : 3000;
+})();
+const HOST = process.env.HOST || '0.0.0.0';
 
 const MAX_TICKETS = Number(process.env.MAX_TICKETS || 200);
 const TICKET_PRICE = Number(process.env.TICKET_PRICE_VND || 350000);
@@ -379,8 +385,10 @@ app.get('/admin.html', (req, res) => {
 
 app.use(express.static(publicDir));
 
-app.listen(PORT, () => {
-  console.log(`Vietnamese Excellence API http://localhost:${PORT}`);
+app.listen(PORT, HOST, () => {
+  console.log(
+    `Vietnamese Excellence API listening on http://${HOST}:${PORT} (PORT env=${process.env.PORT || 'undefined'})`
+  );
   if (process.env.NODE_ENV === 'production') {
     if (!ADMIN_PASSWORD) console.warn('[admin] Thiếu ADMIN_PASSWORD — không đăng nhập được.');
     if (SESSION_SECRET === 'dev-only-change-in-production') {
