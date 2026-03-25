@@ -34,7 +34,8 @@
     setLoading(true, 'Đang check-in…');
     try {
       const res = await apiPost('/api/checkin', { ticket_code });
-      showResult('ok', '✅ Valid ticket — ' + (res.message || 'Check-in successful'));
+      // backend message hiện đang là tiếng Anh; hiển thị luôn tiếng Việt cho nhân viên
+      showResult('ok', '✅ Vé hợp lệ — Check-in thành công');
       toast('Check-in thành công', 'success');
       input.value = '';
     } catch (err) {
