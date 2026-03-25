@@ -198,16 +198,14 @@ app.post('/api/purchase', purchaseValidators, async (req, res) => {
     return res.status(500).json({ success: false, message: 'Không thể tạo vé. Thử lại sau.' });
   }
 
-  try {
-    await sendPurchaseConfirmation({
-      email,
-      name,
-      totalPrice: orderTotal,
-      tickets: tickets.map((t) => ({ ticket_code: t.ticket_code })),
-    });
-  } catch (e) {
-    console.error('[mail]', e);
-  }
+  // Gửi email xác nhận ở chế độ "background" để không làm chặn request /api/purchase
+  // (SMTP timeout có thể khiến frontend xoay vòng mãi nếu await).
+  sendPurchaseConfirmation({
+    email,
+    name,
+    totalPrice: orderTotal,
+    tickets: tickets.map((t) => ({ ticket_code: t.ticket_code })),
+  }).catch((e) => console.error('[mail]', e));
 
   res.json({
     success: true,

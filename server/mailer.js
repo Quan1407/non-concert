@@ -18,6 +18,10 @@ function createTransport() {
     port: Number(process.env.SMTP_PORT || 587),
     secure: process.env.SMTP_SECURE === 'true',
     auth: { user, pass },
+    // Timeout để tránh sendMail treo quá lâu trên môi trường network hạn chế
+    connectionTimeout: 10000,
+    greetingTimeout: 5000,
+    socketTimeout: 15000,
   });
 }
 
@@ -75,13 +79,18 @@ async function sendPurchaseConfirmation(payload) {
   });
   htmlBody += `</ul>`;
 
-  await transport.sendMail({
+  const send = transport.sendMail({
     from,
     to: payload.email,
     subject: 'Vietnamese Excellence - World-class Hospitality — Xác nhận đặt vé & thanh toán',
     html: htmlBody,
     attachments,
   });
+  // Hard timeout thêm (dù nodemailer có timeout, vẫn nên có lớp dự phòng).
+  await Promise.race([
+    send,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Email timeout')), 14000)),
+  ]);
 
   return { sent: true };
 }
